@@ -107,9 +107,6 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.votefail_candidiate_label.resize(260,40)
             return
         
-        self.votesuccess_label.resize(250,40)
+        self.votesuccess_label.resize(240,40)
         self.ID_input.clear()
         self.ID_input.setFocus()
-        self.candidate_one_radiobutton.setChecked(False)
-        self.candidate_two_radiobutton.setChecked(False)
-        self.candidate_three_radiobutton.setChecked(False)

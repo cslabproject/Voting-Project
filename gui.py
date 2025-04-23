@@ -131,7 +131,7 @@ class Ui_MainWindow(object):
         self.votefail_repeat_label.setWordWrap(True)
         self.votefail_repeat_label.setObjectName("votefail_repeat_label")
         self.votesuccess_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.votesuccess_label.setGeometry(QtCore.QRect(130, 520, 0, 40))
+        self.votesuccess_label.setGeometry(QtCore.QRect(140, 520, 0, 40))
         font = QtGui.QFont()
         font.setFamily("Ebrima")
         font.setPointSize(14)
