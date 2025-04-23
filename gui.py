@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(500, 650)
         MainWindow.setMinimumSize(QtCore.QSize(500, 650))
-        MainWindow.setMaximumSize(QtCore.QSize(600, 650))
+        MainWindow.setMaximumSize(QtCore.QSize(500, 650))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
