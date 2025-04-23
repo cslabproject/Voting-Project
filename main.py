@@ -1,6 +1,9 @@
 from logic import *
 
 def main():
+    '''
+    Function to run GUI program
+    '''
     application = QApplication([])
     window = Logic()
     window.show()

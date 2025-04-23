@@ -6,7 +6,10 @@ class Logic(QMainWindow, Ui_MainWindow):
     '''
     A class controlling the logic for the GUI application.
     '''
-    def __init__(self):
+    def __init__(self) -> None:
+        '''
+        Method to initialize a Logic class and connect GUI buttons to functions.
+        '''
         super().__init__()
         self.setupUi(self)
 
@@ -26,11 +29,14 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.votesuccess_label.resize(0,40)
         
 
-    def data_writing(self, voter_id):
-
+    def data_writing(self, voter_id:int) -> None:
+        '''
+        Method to write vote data into a .csv file.
+        :param voter_id: The unique voter ID integer entered by the user
+        '''
         if self.candidate_one_radiobutton.isChecked():
             choice = 'Candidate 1'
-        elif self.candidate_two_radiobutton.isChecked():
+        elif self.candidate_two_radiobutton.isChecked():            # Evaluates user choice
             choice = 'Candidate 2'
         elif self.candidate_three_radiobutton.isChecked():
             choice = 'Candidate 3'
@@ -44,7 +50,7 @@ class Logic(QMainWindow, Ui_MainWindow):
             lines = my_csv.readlines()
             temp_list = []
             for line in lines:                          # Verifies ID has not voted before
-                temp_list.append(line.split(','))
+                temp_list = line.split(',')
                 if str(voter_id) in temp_list[0]:
                     raise IndexError
                 temp_list = []
@@ -52,14 +58,14 @@ class Logic(QMainWindow, Ui_MainWindow):
             if len(lines) == 0:
                 csv_writer.writerow(['Voter ID','Choice','Candidate 1 Votes', 'Candidate 2 Votes', 'Candidate 3 Votes', 'Total Votes'])
                 total_votes = 0
-                candidate_one_votes = 0
+                candidate_one_votes = 0                     # Sets template for .csv
                 candidate_two_votes = 0
                 candidate_three_votes = 0
-            else:
+            else:                                           
                 final_line = lines[-1]
                 final_line = final_line.split(',')
                 total_votes = int(final_line[5])
-                candidate_one_votes = int(final_line[2])
+                candidate_one_votes = int(final_line[2])    # Retrieves values of previous line in .csv to update later    
                 candidate_two_votes = int(final_line[3])
                 candidate_three_votes = int(final_line[4])
 
@@ -69,7 +75,7 @@ class Logic(QMainWindow, Ui_MainWindow):
                 total_votes +=1
             elif choice == 'Candidate 2':
                 candidate_two_votes += 1
-                total_votes +=1
+                total_votes +=1                     # Writes data to .csv
             elif choice == 'Candidate 3':
                 candidate_three_votes += 1
                 total_votes += 1
@@ -77,9 +83,11 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 
     def submit(self) -> None:
-
+        '''
+        Method to submit vote and provide GUI feedback.
+        '''
         voter_id = self.ID_input.text()
-        self.clear_text()
+        self.clear_text() # Necessary to prevent text overlapping             
 
         try:
             if voter_id == '':
@@ -88,8 +96,8 @@ class Logic(QMainWindow, Ui_MainWindow):
                 voter_id = int(voter_id)
         except ValueError:
             self.votefail_label.resize(120,40)
-            self.votefail_number_label.resize(300,40)
-            return
+            self.votefail_number_label.resize(300,40)     
+            return                                          # Evaluates blank/non-integer ID errors
         except TypeError:
             self.votefail_label.resize(120,40)
             self.votefail_empty_label.resize(180,40)
@@ -99,12 +107,12 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.data_writing(voter_id)
         except IndexError:
             self.votefail_label.resize(120,40)
-            self.votefail_repeat_label.setText(f'ID {voter_id} has already voted')
+            self.votefail_repeat_label.setText(f'ID {voter_id} has already voted')    #Handles repeat voter errors  
             self.votefail_repeat_label.resize(350,80)
             return
         except AttributeError:
             self.votefail_label.resize(120,40)
-            self.votefail_candidiate_label.resize(260,40)
+            self.votefail_candidiate_label.resize(260,40)           #Handles missing candidate errors
             return
         
         self.votesuccess_label.resize(240,40)
