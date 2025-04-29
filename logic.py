@@ -14,6 +14,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.submit_button.clicked.connect(lambda:self.submit())
+        self.results_button.clicked.connect(lambda:self.results())
 
 
     def clear_text(self) -> None:
@@ -23,10 +24,20 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.voteprompt_label.resize(0,80)
         self.votefail_label.resize(0,40)
         self.votefail_repeat_label.resize(0,80)
-        self.votefail_candidiate_label.resize(0,40)
+        self.votefail_candidate_label.resize(0,40)
         self.votefail_empty_label.resize(0,40)
         self.votefail_number_label.resize(0,40)
         self.votesuccess_label.resize(0,40)
+
+        self.results_label.resize(0,30)
+        self.candidate1_result_label.resize(0,30)
+        self.candidate2_result_label.resize(0,30)
+        self.candidate3_result_label.resize(0,30)
+        self.total_result_label.resize(0,30)
+        self.candidate1_resultnum_label.resize(0,30)
+        self.candidate2_resultnum_label.resize(0,30)
+        self.candidate3_resultnum_label.resize(0,30)
+        self.total_resultnum_label.resize(0,30)
         
 
     def data_writing(self, voter_id:int) -> None:
@@ -51,9 +62,8 @@ class Logic(QMainWindow, Ui_MainWindow):
             temp_list = []
             for line in lines:                          # Verifies ID has not voted before
                 temp_list = line.split(',')
-                if str(voter_id) in temp_list[0]:
+                if str(voter_id) == temp_list[0]:
                     raise IndexError
-                temp_list = []
             
             if len(lines) == 0:
                 csv_writer.writerow(['Voter ID','Choice','Candidate 1 Votes', 'Candidate 2 Votes', 'Candidate 3 Votes', 'Total Votes'])
@@ -112,9 +122,54 @@ class Logic(QMainWindow, Ui_MainWindow):
             return
         except AttributeError:
             self.votefail_label.resize(120,40)
-            self.votefail_candidiate_label.resize(260,40)           #Handles missing candidate errors
+            self.votefail_candidate_label.resize(260,40)           #Handles missing candidate errors
             return
         
         self.votesuccess_label.resize(240,40)
         self.ID_input.clear()
         self.ID_input.setFocus()
+    
+
+    def display_results(self) -> None:
+        '''
+        Method to handle displaying the results on the GUI application
+        '''
+        self.results_label.resize(170,30)
+        self.candidate1_result_label.resize(70,30)
+        self.candidate2_result_label.resize(55,30)
+        self.candidate3_result_label.resize(115,30)
+        self.total_result_label.resize(90,30)
+        self.candidate1_resultnum_label.resize(195,30)
+        self.candidate2_resultnum_label.resize(195,30)
+        self.candidate3_resultnum_label.resize(195,30)
+        self.total_resultnum_label.resize(195,30)
+
+
+    def results(self) -> None:
+        '''
+        Method to gather vote data and display the data results of the voting polls.
+        '''
+        self.clear_text()
+        
+        try:
+            with open('vote_data.csv','r', newline='') as my_csv:
+                lines = my_csv.readlines()
+                lines = lines[-1]
+
+                results_list = lines.split(',')
+                results_list = results_list[2:]
+
+                self.candidate1_resultnum_label.setText(results_list[0].strip())
+                self.candidate2_resultnum_label.setText(results_list[1].strip())
+                self.candidate3_resultnum_label.setText(results_list[2].strip())
+                self.total_resultnum_label.setText(results_list[3].strip())
+
+                self.display_results()
+
+        except FileNotFoundError:
+            self.candidate1_resultnum_label.setText('0')
+            self.candidate2_resultnum_label.setText('0')
+            self.candidate3_resultnum_label.setText('0')
+            self.total_resultnum_label.setText('0')
+
+            self.display_results()
